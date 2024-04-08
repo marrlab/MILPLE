@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH -o ./logs/out-@1@-@2@.txt
+#SBATCH -e ./logs/error-@1@-@2@.txt
+
+#SBATCH -J @1@-@2@
+
+#SBATCH -p gpu_p
+
+#SBATCH --exclude=supergpu05,supergpu07,supergpu08
+
+#SBATCH --gres=gpu:1
+
+#SBATCH -c 6
+
+#SBATCH --mem=90G
+
+#SBATCH --nice=10000
+
+#SBATCH --qos=gpu
+
+#SBATCH -t 2-00:00:00
+
+cd ..
+source $HOME/.bashrc
+
+python3 extract_features_masked.py @1@ @2@
+
+python3 MIL_Training.py @1@ @2@
